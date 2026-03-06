@@ -13,4 +13,5 @@ sources:
     tables:
       - name: NATION
         description: Raw NATION table
-        loaded_at_field: N_NATIONKEY
+        config:
+          loaded_at_field: N_NATIONKEY

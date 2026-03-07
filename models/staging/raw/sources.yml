@@ -2,10 +2,9 @@ version: 2
 
 sources:
   - name: raw
-    database: SNOWFLAKE_SAMPLE_DATA        # optional if default
+    database: SNOWFLAKE_SAMPLE_DATA
     schema: TPCH_SF1
     loader: snowflake
-
     description: >
       Raw tables loaded from source systems via ingestion pipelines.
       These tables are not created by dbt.
@@ -13,5 +12,4 @@ sources:
     tables:
       - name: NATION
         description: Raw NATION table
-        config:
-          loaded_at_field: N_NATIONKEY
+      

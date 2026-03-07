@@ -1,0 +1,74 @@
+version: 2
+
+sources:
+  - name: stg_po
+    database: SNOWFLAKE_SAMPLE_DATA
+    schema: TPCH_SF1
+    loader: snowflake
+    description: >
+      Raw tables loaded from source systems via ingestion pipelines.
+      These tables are not created by dbt.
+
+    tables:
+      - name: CUSTOMER
+        description: Raw customer data
+        # Define columns + tests + descriptions
+        columns:
+          - name: C_CUSTKEY
+            description: "Primary key of CUSTOMER."
+            tests:
+              - unique
+              - not_null
+          - name: C_NATIONKEY
+            description: "Nation KEY FK."
+            tests:
+              - not_null
+          - name: C_NAME
+            description: "Customer NAME."
+            tests:
+              - not_null
+              - dbt_expectations.expect_column_values_to_match_regex:
+                  regex: "^Customer#[0-9]{9}$"
+
+
+
+
+      - name: PARTSUPP
+        description: Raw PART SUPPLIER table
+        config:
+          tags: [reference, tpch]
+          meta:
+            pii: false
+            owner: PART-DEP
+
+
+
+      - name: ORDERS
+        description: Raw ORDERS table
+        # Used by `dbt source freshness`
+       
+        # Optional: override freshness rules at TABLE level
+        config:
+          loaded_at_field: "O_ORDERDATE"  # must be timestamp/datetime column
+          freshness:
+            warn_after: {count: 6, period: hour}
+            error_after: {count: 12, period: hour}
+
+      - name: NATION
+        description: Raw NATION table
+
+      - name: PART
+        description: Raw PART table
+
+      - name: LINEITEM
+        description: Raw LINE ITEM table
+
+      - name: REGION
+        description: Raw REGION table
+
+      - name: SUPPLIER
+        description: Raw SUPPLIER table
+        # Table-level tests (relationships, etc.)
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "S_NATIONKEY >= 0"

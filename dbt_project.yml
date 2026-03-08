@@ -33,9 +33,13 @@ clean-targets:         # directories to be removed by `dbt clean`
 # using the `{{ config(...) }}` macro.
 
 models:
-  my_new_project:
-    # Applies to all files under models/example/
-    example:
-      +materialized: table
+
+  stock_market:
+   models:
+    staging:
+      staging_partOrders:
+        +schema: stg_po
+        +materialized: view
+
 flags:
   require_generic_test_arguments_property: true

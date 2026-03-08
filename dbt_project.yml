@@ -37,6 +37,9 @@ models:
     staging:
       +schema: stg_po
       +materialized: view
+    mart:
+      +schema: mart
+      +materialized: view  
 
 
 flags:
